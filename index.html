@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="shortcut icon"
+      href="https://static.vecteezy.com/system/resources/previews/011/973/413/non_2x/cat-face-cute-free-download-transparent-image-illustration-clipart-pet-wildlife-free-png.png"
+      type="image/x-icon"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | เข้าสู่ระบบ</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>เข้าสู่ระบบ</h2>
+      <img id="statusImage" src="./wait.jpg" alt="Status Image" />
+      <form id="loginForm">
+        <div id="errorMessage" class="error-message"></div>
+        <div class="input-group">
+          <input type="text" id="username" placeholder="กรอกชื่อ" />
+        </div>
+        <div class="input-group">
+          <input type="password" id="password" placeholder="กรอกรหัสผ่าน" />
+        </div>
+        <button type="submit">เข้าสู่ระบบ</button>
+      </form>
+    </div>
+
+    <!-- ป๊อบอัพ -->
+    <div class="modal" id="successModal">
+      <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>นั้นแน๊ เข้ามาในใจเเล้วไม่ให้ออกน้า</h2>
+        <img src="./sucecss.jpg" alt="Success Image" />
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
