@@ -2,43 +2,247 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <link
-      rel="shortcut icon"
-      href="https://static.vecteezy.com/system/resources/previews/011/973/413/non_2x/cat-face-cute-free-download-transparent-image-illustration-clipart-pet-wildlife-free-png.png"
-      type="image/x-icon"
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login | เข้าสู่ระบบ</title>
-    <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    <meta
+      name="description"
+      content="เว็บบันทึกค่ารอบ Grab Rider คำนวณค่าน้ำมัน กำไรสุทธิ และสรุปรายวัน รายสัปดาห์ รายเดือน"
     />
+    <title>Rider Profit Dashboard | บันทึกค่ารอบ</title>
+    <script>
+      window.tailwind = window.tailwind || {};
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Prompt", "Inter", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 18px 60px rgba(15, 23, 42, 0.10)",
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <div class="container">
-      <h2>เข้าสู่ระบบ</h2>
-      <img id="statusImage" src="./wait.jpg" alt="Status Image" />
-      <form id="loginForm">
-        <div id="errorMessage" class="error-message"></div>
-        <div class="input-group">
-          <input type="text" id="username" placeholder="กรอกชื่อ" />
-        </div>
-        <div class="input-group">
-          <input type="password" id="password" placeholder="กรอกรหัสผ่าน" />
-        </div>
-        <button type="submit">เข้าสู่ระบบ</button>
-      </form>
+  <body class="min-h-screen bg-slate-100 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute left-[-10%] top-[-10%] h-72 w-72 rounded-full bg-emerald-300/30 blur-3xl dark:bg-emerald-500/10"></div>
+      <div class="absolute bottom-[-12%] right-[-8%] h-96 w-96 rounded-full bg-sky-300/30 blur-3xl dark:bg-sky-500/10"></div>
     </div>
 
-    <!-- ป๊อบอัพ -->
-    <div class="modal" id="successModal">
-      <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2>นั้นแน๊ เข้ามาในใจเเล้วไม่ให้ออกน้า</h2>
-        <img src="./sucecss.jpg" alt="Success Image" />
-      </div>
-    </div>
+    <main class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8">
+      <header class="rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-900/85 sm:p-6">
+        <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p class="mb-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+              Grab Rider Fuel & Profit Tracker
+            </p>
+            <h1 class="text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+              บันทึกค่ารอบ ค่าน้ำมัน และกำไรสุทธิ
+            </h1>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base">
+              จดรายได้แต่ละงาน ใส่กิโลเมตร ระบบจะคำนวณลิตรที่ใช้ ค่าน้ำมัน และสรุปผลรายวัน รายสัปดาห์ รายเดือนให้อัตโนมัติ
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button id="refreshFuelBtn" class="inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-600">
+              อัปเดตราคาน้ำมัน
+            </button>
+            <button id="themeToggle" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
+              <span id="themeIcon">🌙</span>
+              <span class="ml-2">Dark Mode</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid gap-4 lg:grid-cols-4">
+        <article class="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-sm font-medium text-slate-500 dark:text-slate-400">รายได้ค่ารอบ</p>
+          <p id="totalFare" class="mt-3 text-3xl font-extrabold text-slate-950 dark:text-white">฿0.00</p>
+          <p class="mt-2 text-xs text-slate-500">รวมจากงานที่บันทึก</p>
+        </article>
+        <article class="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-sm font-medium text-slate-500 dark:text-slate-400">ค่าน้ำมันรวม</p>
+          <p id="totalFuelCost" class="mt-3 text-3xl font-extrabold text-rose-500">฿0.00</p>
+          <p id="totalLiters" class="mt-2 text-xs text-slate-500">0.00 ลิตร</p>
+        </article>
+        <article class="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-sm font-medium text-slate-500 dark:text-slate-400">กำไรสุทธิ</p>
+          <p id="totalProfit" class="mt-3 text-3xl font-extrabold text-emerald-500">฿0.00</p>
+          <p class="mt-2 text-xs text-slate-500">ค่ารอบ - ค่าน้ำมัน</p>
+        </article>
+        <article class="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-sm font-medium text-slate-500 dark:text-slate-400">ระยะทางทั้งหมด</p>
+          <p id="totalDistance" class="mt-3 text-3xl font-extrabold text-sky-500">0.00 กม.</p>
+          <p id="totalJobs" class="mt-2 text-xs text-slate-500">0 งาน</p>
+        </article>
+      </section>
+
+      <section class="grid gap-6 xl:grid-cols-[420px_1fr]">
+        <div class="space-y-6">
+          <form id="jobForm" class="rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+            <div class="mb-5 flex items-center justify-between gap-3">
+              <div>
+                <h2 class="text-xl font-bold">เพิ่มงานส่งของ</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">บันทึกค่ารอบและระยะทางของแต่ละงาน</p>
+              </div>
+              <span class="rounded-2xl bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">Auto save</span>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="block sm:col-span-2">
+                <span class="mb-1 block text-sm font-semibold">วันที่ทำงาน</span>
+                <input id="jobDate" type="date" required class="field" />
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-sm font-semibold">ค่ารอบ (บาท)</span>
+                <input id="fare" type="number" min="0" step="0.01" placeholder="เช่น 62" required class="field" />
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-sm font-semibold">ระยะทาง (กม.)</span>
+                <input id="distance" type="number" min="0" step="0.01" placeholder="เช่น 8.5" required class="field" />
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-sm font-semibold">อัตราสิ้นเปลือง</span>
+                <input id="efficiency" type="number" min="1" step="0.1" value="40" required class="field" />
+                <span class="mt-1 block text-xs text-slate-500">กิโลเมตร / ลิตร</span>
+              </label>
+              <label class="block">
+                <span class="mb-1 block text-sm font-semibold">ราคาน้ำมัน</span>
+                <input id="fuelPrice" type="number" min="0" step="0.01" required class="field" />
+                <span class="mt-1 block text-xs text-slate-500">บาท / ลิตร</span>
+              </label>
+              <label class="block sm:col-span-2">
+                <span class="mb-1 block text-sm font-semibold">หมายเหตุ / ลูกค้า / พื้นที่</span>
+                <input id="note" type="text" maxlength="80" placeholder="เช่น เซ็นทรัล - คอนโดลูกค้า" class="field" />
+              </label>
+            </div>
+
+            <div class="mt-5 rounded-3xl bg-slate-50 p-4 dark:bg-slate-800/70">
+              <div class="grid grid-cols-3 gap-3 text-center text-sm">
+                <div>
+                  <p class="text-slate-500">ลิตรที่ใช้</p>
+                  <p id="previewLiters" class="font-extrabold">0.00 L</p>
+                </div>
+                <div>
+                  <p class="text-slate-500">ค่าน้ำมัน</p>
+                  <p id="previewFuelCost" class="font-extrabold text-rose-500">฿0.00</p>
+                </div>
+                <div>
+                  <p class="text-slate-500">กำไร</p>
+                  <p id="previewProfit" class="font-extrabold text-emerald-500">฿0.00</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="mt-5 w-full rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-emerald-500 dark:hover:bg-emerald-600" type="submit">
+              บันทึกงานนี้
+            </button>
+          </form>
+
+          <section class="rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+            <h2 class="text-xl font-bold">ราคาน้ำมันวันนี้</h2>
+            <p id="fuelStatus" class="mt-1 text-sm text-slate-500 dark:text-slate-400">กำลังโหลดราคาน้ำมัน...</p>
+            <div class="mt-4 grid gap-3 sm:grid-cols-2" id="fuelCards"></div>
+          </section>
+        </div>
+
+        <div class="space-y-6">
+          <section class="rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <h2 class="text-xl font-bold">สรุปผลงาน</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">เลือกช่วงเวลาเพื่อดูรายวัน รายสัปดาห์ หรือรายเดือน</p>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-3 lg:w-[520px]">
+                <label class="block">
+                  <span class="mb-1 block text-xs font-bold text-slate-500">ช่วงสรุป</span>
+                  <select id="summaryRange" class="field py-3">
+                    <option value="day">รายวัน</option>
+                    <option value="week">รายสัปดาห์</option>
+                    <option value="month">รายเดือน</option>
+                    <option value="all">ทั้งหมด</option>
+                  </select>
+                </label>
+                <label class="block sm:col-span-2">
+                  <span class="mb-1 block text-xs font-bold text-slate-500">อ้างอิงวันที่</span>
+                  <input id="summaryDate" type="date" class="field py-3" />
+                </label>
+              </div>
+            </div>
+
+            <div class="mt-5 grid gap-3 md:grid-cols-4">
+              <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-800/70">
+                <p class="text-xs text-slate-500">จำนวนงาน</p>
+                <p id="rangeJobs" class="mt-1 text-2xl font-extrabold">0</p>
+              </div>
+              <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-800/70">
+                <p class="text-xs text-slate-500">ค่ารอบ</p>
+                <p id="rangeFare" class="mt-1 text-2xl font-extrabold">฿0.00</p>
+              </div>
+              <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-800/70">
+                <p class="text-xs text-slate-500">ค่าน้ำมัน</p>
+                <p id="rangeFuel" class="mt-1 text-2xl font-extrabold text-rose-500">฿0.00</p>
+              </div>
+              <div class="rounded-3xl bg-slate-50 p-4 dark:bg-slate-800/70">
+                <p class="text-xs text-slate-500">กำไรสุทธิ</p>
+                <p id="rangeProfit" class="mt-1 text-2xl font-extrabold text-emerald-500">฿0.00</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 class="text-xl font-bold">รายการงานทั้งหมด</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">ข้อมูลเก็บในเครื่องของคุณด้วย localStorage</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button id="exportExcelBtn" class="rounded-2xl bg-emerald-100 px-4 py-3 text-sm font-bold text-emerald-700 transition hover:bg-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300">Export Excel</button>
+                <button id="exportPdfBtn" class="rounded-2xl bg-sky-100 px-4 py-3 text-sm font-bold text-sky-700 transition hover:bg-sky-200 dark:bg-sky-500/10 dark:text-sky-300">Export PDF</button>
+                <button id="clearBtn" class="rounded-2xl bg-rose-100 px-4 py-3 text-sm font-bold text-rose-700 transition hover:bg-rose-200 dark:bg-rose-500/10 dark:text-rose-300">ล้างข้อมูล</button>
+              </div>
+            </div>
+
+            <div class="mt-5 overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800">
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800" id="jobsTable">
+                  <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/80 dark:text-slate-400">
+                    <tr>
+                      <th class="px-4 py-3">วันที่</th>
+                      <th class="px-4 py-3">ค่ารอบ</th>
+                      <th class="px-4 py-3">กม.</th>
+                      <th class="px-4 py-3">ลิตร</th>
+                      <th class="px-4 py-3">ค่าน้ำมัน</th>
+                      <th class="px-4 py-3">กำไร</th>
+                      <th class="px-4 py-3">หมายเหตุ</th>
+                      <th class="px-4 py-3 text-right">จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="jobsBody" class="divide-y divide-slate-100 bg-white dark:divide-slate-800 dark:bg-slate-900"></tbody>
+                </table>
+              </div>
+              <div id="emptyState" class="hidden bg-white px-4 py-12 text-center dark:bg-slate-900">
+                <p class="text-4xl">🛵</p>
+                <p class="mt-3 font-bold">ยังไม่มีรายการงาน</p>
+                <p class="text-sm text-slate-500">เพิ่มงานแรกเพื่อเริ่มคำนวณกำไรได้เลย</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
     <script src="script.js"></script>
   </body>
 </html>
